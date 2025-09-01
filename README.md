@@ -1,5 +1,4 @@
-# Nombre del proyecto
-Efecto del gen RbohB en la expresión diferencial de raíces de frijol
+# Efecto del gen RbohB en la expresión diferencial de raíces de frijol
 
 Fecha de inicio: 31/08/2025
 
@@ -9,7 +8,7 @@ Fecha de inicio: 31/08/2025
   <email:[pedropm@lcg.unam.mx]>
   
 - Dara Jahzeel Palafox Collado
-- <email:[darapc@lcg.unam.mx]>
+  <email:[darapc@lcg.unam.mx]>
 
 ## Planteamiento del problema
 
