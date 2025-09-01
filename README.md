@@ -1,14 +1,17 @@
 # Nombre del proyecto
 
-Fecha: dd/mm/aaaa
+Fecha: 31/08/2025
 
 **Participantes**:
 
-- Nombre completo <email:[dirección]>
+- Pedro Daniel Pineda Martinez <email:[pedropm@lcg.unam.mx]>
+- Dara Jahzeel Palafox Collado <email:[darapc@lcg.unam.mx]>
 
 ## Planteamiento del problema
 
-[Describir la problemática que se presenta, la situación que motiva la realización del proyecto y que está causando posibles inconvenientes]
+La interacción simbiótica en Phaseolus vulgaris con Rhizobium tropici (nodulación) y Rhizophagus irregularis (micorrización) es crucial para la adquisición de nitrógeno y fósforo, respectivamente. Sin embargo, el gen PvRbohB, que regula la producción de especies reactivas de oxígeno (ROS), ejerce un control diferencial y aparentemente contradictorio sobre estas simbiosis: su silenciamiento (PvRbohB-RNAi) compromete severamente la nodulación, pero promueve la colonización micorrízica.
+
+Ante esta dualidad, surge la siguiente pregunta de investigación: ¿Cómo el silenciamiento del gen PvRbohB en Phaseolus vulgaris modula diferencialmente las redes de interacción genética y los procesos fisiológicos subyacentes, como la homeostasis de ROS, la remodelación de la pared celular y la señalización de fitohormonas, para impactar de manera opuesta la nodulación con Rhizobium tropici y la colonización micorrízica con Rhizophagus irregularis en las etapas tempranas de la simbiosis?
 
 ## Calendario de trabajo
 
@@ -16,13 +19,13 @@ Fecha: dd/mm/aaaa
 
 | Actividad | Fecha   | Responsable  | Entregable |
 |----------|----------|----------|----------|
-| Descripción de proyecto    | 3-10 marzo  | Juan López, Daniela Estrada   | Documento markdown |
-| Especificación de requisitos    | septiembre   | Juan López   | Documento markdown   |
-| Análisis y diseño   | septiembre  |  Daniela Estrada   | Documento markdown |
-| Construcción   | octubre, noviembre  |  Daniela Estrada, Juan López   | Scripts |
-| Pruebas   | noviembre  |  Daniela Estrada, Juan López   | Documento markdown |
-| Reporte de resultados  | noviembre  |  Daniela Estrada, Juan López   | Documentos markdown |
-| Presentación del proyecto   | diciembre  |  Daniela Estrada, Juan López   | repositorio GitHub (release)|
+| Descripción de proyecto    | 31-08-25  | Daniel Pineda  | Documento markdown |
+| Especificación de requisitos    | Septiembre   | Por definir  | Documento markdown   |
+| Análisis y diseño   | Septiembre  | Por definir  | Documento markdown |
+| Construcción   | Octubre-Noviembre |  Por definir   | Scripts |
+| Pruebas   | Noviembre  | Por definir    | Documento markdown |
+| Reporte de resultados  | Noviembre  |  Por definir   | Documentos markdown |
+| Presentación del proyecto   | Diciembre  |  Por definir  | repositorio GitHub (release)|
 
 
 
