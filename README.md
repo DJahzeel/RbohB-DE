@@ -1,11 +1,14 @@
-# Nombre del proyecto
+# Efecto del gen RbohB en la expresión diferencial de raíces de frijol
 
-Fecha: 31/08/2025
+Fecha de inicio: 31/08/2025
 
 **Participantes**:
 
-- Pedro Daniel Pineda Martinez <email:[pedropm@lcg.unam.mx]>
-- Dara Jahzeel Palafox Collado <email:[darapc@lcg.unam.mx]>
+- Pedro Daniel Pineda Martinez
+  <email:[pedropm@lcg.unam.mx]>
+  
+- Dara Jahzeel Palafox Collado
+  <email:[darapc@lcg.unam.mx]>
 
 ## Planteamiento del problema
 
