@@ -1,6 +1,6 @@
 # Efecto del gen RbohB en la expresión diferencial de raíces de frijol
 
-Fecha de inicio: 31/08/2025
+Fecha de inicio: 31/08/2028 
 
 **Participantes**:
 
