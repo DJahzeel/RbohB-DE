@@ -51,7 +51,7 @@ Paso 6: Obtención de resultados
 
 ## Resultados esperados
 
-
+No se que se espera.
 
 
 
