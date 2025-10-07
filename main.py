@@ -87,8 +87,8 @@ def main():
         if reference_data is not None:
             reference_genome = ga.get_reference(reference_data)
             if args.file:
-                os.makedirs('docs', exist_ok=True)
-                reference_genome.to_csv(f'docs/{args.reference}_reference_genome.tsv', sep='\t', index=False)
+                os.makedirs('data', exist_ok=True)
+                reference_genome.to_csv(f'data/{args.reference}_reference_genome.tsv', sep='\t', index=False)
         else :
             print(f"No assemblies/reference genome found for organism: {args.reference}")
 

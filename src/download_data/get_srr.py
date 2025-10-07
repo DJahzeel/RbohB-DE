@@ -33,6 +33,6 @@ def run_end(run_info):
     return paired_end, single_end
 
 def save_srr(paired_end, single_end, file_name):
-    os.makedirs('docs', exist_ok=True)
-    paired_end.to_csv(f'docs/{file_name}_paired.tsv', sep='\t', index=False, header=False )
-    single_end.to_csv(f'docs/{file_name}_single.tsv', sep='\t', index=False, header=False)
+    os.makedirs('data', exist_ok=True)
+    paired_end.to_csv(f'data/{file_name}_paired.tsv', sep='\t', index=False, header=False )
+    single_end.to_csv(f'data/{file_name}_single.tsv', sep='\t', index=False, header=False)
