@@ -1,0 +1,39 @@
+# Archivos de caché y compilados de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Artefactos de construcción e instalación
+*.egg-info/
+.eggs/
+build/
+dist/
+*.egg
+
+# Entornos virtuales 
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# Archivos de configuración de IDEs y editores
+.vscode/
+.idea/
+.spyder-py3/
+
+# Archivos de datos grandes
+!data/.gitkeep
+
+# Checkpoints de Jupyter Notebook
+.ipynb_checkpoints/
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración sensibles
+.env
+*.env
+credentials.*

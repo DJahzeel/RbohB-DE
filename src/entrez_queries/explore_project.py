@@ -1,6 +1,6 @@
 
 from Bio import Entrez
-import argparse as ap
+
 
 def fetch_project_id(accesion,mail):
     Entrez.email = mail

@@ -1,0 +1,10 @@
+[project]
+name = "RbohB-DE"
+version = "0.1.0"
+dependencies = [
+    "pandas",
+    "biopython"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
