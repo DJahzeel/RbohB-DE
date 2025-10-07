@@ -1,4 +1,5 @@
 import argparse as ap
+import os
 
 from entrez_queries import explore_project as ep 
 from entrez_queries import explore_databases as ed
@@ -30,8 +31,9 @@ parser.add_argument('--srr',
                     default=False,
                     help="Get SRR ids from SRA database")
 parser.add_argument('--file',
-                    type=str,
+                    type=bool,
                     required=False,
+                    default=False,
                     help="File to save results")
 parser.add_argument('--reference',
                     type=str,
@@ -79,12 +81,14 @@ def main():
         srr_ids = srr.srr_ids(ids)
         paired, single = srr.run_end(srr_ids)
         if args.file:
-            srr.save_srr(paired, single, args.file)
+            srr.save_srr(paired, single, args.accession)
     if args.reference:
         reference_data = ga.get_assemblies_data(args.reference)
         if reference_data is not None:
             reference_genome = ga.get_reference(reference_data)
-            reference_genome.to_csv(f'{args.reference}_reference_genome.tsv', sep='\t', index=False)
+            if args.file:
+                os.makedirs('docs', exist_ok=True)
+                reference_genome.to_csv(f'docs/{args.reference}_reference_genome.tsv', sep='\t', index=False)
         else :
             print(f"No assemblies/reference genome found for organism: {args.reference}")
 

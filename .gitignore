@@ -37,3 +37,10 @@ Thumbs.db
 .env
 *.env
 credentials.*
+
+# Archivos de salida
+*.tsv
+*.csv
+*.log
+*.out
+*.tmp

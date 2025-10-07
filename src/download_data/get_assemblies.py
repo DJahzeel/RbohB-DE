@@ -27,8 +27,17 @@ def get_reference(assembly_data):
     "RefSeq_category",
     "FtpPath_GenBank"
     ]]
+    
+    df_filtered = df_selected[df_selected["RefSeq_category"] != "na"].copy()
+    filename_prefix = df_filtered['FtpPath_GenBank'].str.split('/').str[-1] 
+    base_path = df_filtered['FtpPath_GenBank']
+    fasta_url = base_path + '/' + filename_prefix + '_genomic.fna.gz'
+    gff_url = base_path + '/' + filename_prefix + '_genomic.gff.gz'
+    df_filtered.loc[:, 'FASTA FTP'] = fasta_url
+    df_filtered.loc[:, 'GFF FTP'] = gff_url
 
-    df_filtered = df_selected[df_selected["RefSeq_category"] != "na"]
-    df_filtered['FASTA FTP'] = df_filtered['FtpPath_GenBank'] + '/' + '_genomic.fna.gz'
-    df_filtered['GFF FTP'] = df_filtered['FtpPath_GenBank'] + '/' + '_genomic.gff.gz'
+    print(" Bash commands to download the reference genome and annotation files:")
+    print("wget -c", fasta_url)
+    print("wget -c", gff_url)
+    
     return df_filtered

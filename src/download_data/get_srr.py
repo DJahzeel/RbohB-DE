@@ -1,6 +1,7 @@
 from Bio import Entrez
 from io import StringIO
 import pandas as pd
+import os
 
 def srr_ids(sra_ids):
 
@@ -32,5 +33,6 @@ def run_end(run_info):
     return paired_end, single_end
 
 def save_srr(paired_end, single_end, file_name):
-    paired_end.to_csv(f'{file_name}_paired.tsv', sep='\t', index=False, header=False)
-    single_end.to_csv(f'{file_name}_single.tsv', sep='\t', index=False, header=False)
+    os.makedirs('docs', exist_ok=True)
+    paired_end.to_csv(f'docs/{file_name}_paired.tsv', sep='\t', index=False, header=False )
+    single_end.to_csv(f'docs/{file_name}_single.tsv', sep='\t', index=False, header=False)
