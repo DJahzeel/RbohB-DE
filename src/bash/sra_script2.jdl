@@ -1,0 +1,51 @@
+#!/bin/bash
+#$ -N sra_downloads
+#$ -cwd
+#$ -S /bin/bash
+#$ -pe smp 30
+
+# Aborta el script inmediatamente si cualquier comando falla.
+set -e
+
+echo "------------------------------------"
+echo "Job-ID: $JOB_ID"
+echo "Hostname: $(hostname)"
+echo "Fecha: $(date)"
+echo "Directorio de trabajo: $(pwd)"
+echo "------------------------------------"
+
+# 1) Inicializa Mamba/Conda
+echo "Activando el entorno de Conda..."
+source /etc/bashrc
+conda activate sra-tools
+echo "Entorno de Conda activado con éxito."
+
+# 2) Verifica que los comandos clave existan
+echo "Verificando la ubicación de los comandos..."
+which conda
+which parallel
+which fasterq-dump
+echo "Verificación de comandos completa."
+
+# 3) Verifica el archivo de entrada-
+SRR_LIST_FILE="/export/space3/users/pedropm/bioproyect/data/srr_ids.txt"
+echo "Ruta del archivo de SRRs: $SRR_LIST_FILE"
+
+if [ ! -s "$SRR_LIST_FILE" ]; then
+    echo "ERROR: El archivo de lista no existe o está vacío."
+    exit 1
+fi
+echo "El archivo de lista existe y no está vacío. Primeras 5 líneas:"
+head -n 5 "$SRR_LIST_FILE"
+echo "------------------------------------"
+
+# 4) Ejecuta el proceso principal
+echo "Iniciando descargas con GNU Parallel..."
+parallel -j 5 \
+    '
+    echo "Iniciando descarga de: {}"
+    fasterq-dump --threads 6 --split-files --outdir ./fastq_results {}
+    echo "Descarga de {} finalizada."
+    ' < "$SRR_LIST_FILE"
+
+echo "Todas las descargas han sido procesadas."
