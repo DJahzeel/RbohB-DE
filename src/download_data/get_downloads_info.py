@@ -1,8 +1,11 @@
 from Bio import Entrez
-import os
+from pathlib import Path
+from urllib.error import HTTPError, URLError
 import pandas as pd
+import time
 
-def run_end(table, record):
+
+def run_end(table, output):
 
     run_ends = {
         'SRR': table['Run'],
@@ -21,36 +24,64 @@ def run_end(table, record):
     print("Total Single-end:", len(single_end))
     print("Total Paired-end:", len(paired_end))
     
+    outdir = Path(output)
+    if outdir.exists() and not outdir.is_dir():
+        raise NotADirectoryError(f"{outdir} existe pero no es un directorio")
     
-    os.makedirs("data", exist_ok=True)
-    os.makedirs(f"data/{record['bioproject']}/{record['database']}_files", exist_ok=True)
+    paired_file_path = outdir / "paired_end_runs.tsv"
+    single_file_path = outdir / "single_end_runs.tsv"
 
-    paired_file_path = f"data/{record['bioproject']}/{record['database']}_files/paired_end_runs.tsv"
-    single_file_path = f"data/{record['bioproject']}/{record['database']}_files/single_end_runs.tsv"
+    try:
+        paired_end.to_csv(paired_file_path, index=False, sep='\t')
+        single_end.to_csv(single_file_path, index=False, sep='\t')
 
-    paired_end.to_csv(paired_file_path, index=False, sep='\t')
-    single_end.to_csv(single_file_path, index=False, sep='\t')
+    except PermissionError as e:
+        raise PermissionError(f"Sin permisos para escribir ") from e
+    except FileNotFoundError as e:
+        raise FileNotFoundError(f"Directorio padre no existe para ") from e
+    except IsADirectoryError as e:
+        raise IsADirectoryError(f" es un directorio, no un archivo") from e
+    except UnicodeEncodeError as e:
+        raise UnicodeEncodeError(e.encoding, e.object, e.start, e.end,
+                                 f"Error de codificación al escribir ")
+    except OSError as e:
+        raise OSError(f"Error del sistema escribiendo: {e}") from e
     
-    return paired_end, single_end
+    return paired_file_path, single_file_path
 
-def get_assemblies_data(organism):
-    assembly_data = []
-    handle = Entrez.esearch(db="assembly", term=organism, retmax=150)
-    search_results = Entrez.read(handle)
-    handle.close()
-    assembly_uids = search_results["IdList"]
-
-    for uid in assembly_uids:
-        handle = Entrez.esummary(db="assembly", id=uid)
-        summary = Entrez.read(handle)
+def get_assemblies_data(organism, email):
+    try:
+        Entrez.email = email
+        handle = Entrez.esearch(db="assembly", term=organism, retmax=150)
+        search_results = Entrez.read(handle)
         handle.close()
+        assembly_uids = search_results["IdList"]
+
+    except (HTTPError, URLError) as e:
+        raise ConnectionError(f"An error occurred: {e}") from e
+    except Exception as e:
+        raise Exception(f"An unexpected error occurred: {e}") from e
+
+    assembly_data = []
+    for uid in assembly_uids:
+        try:
+            Entrez.email = email
+            handle = Entrez.esummary(db="assembly", id=uid)
+            summary = Entrez.read(handle)
+            handle.close()
+        except (HTTPError, URLError) as e:
+            raise ConnectionError(f"An error occurred: {e}") from e
+        except Exception as e:
+            raise Exception(f"An unexpected error occurred: {e}") from e
+
+        time.sleep(0.4)
 
         docsum = summary['DocumentSummarySet']['DocumentSummary'][0]
         assembly_data.append(docsum)
     
     return assembly_data
 
-def get_reference(assembly_data, organism):
+def get_reference(assembly_data, output, organism):
 
     df_assembly = pd.DataFrame(assembly_data)
     df_selected = df_assembly[[
@@ -70,8 +101,23 @@ def get_reference(assembly_data, organism):
     df_filtered.loc[:, 'FASTA FTP'] = fasta_url
     df_filtered.loc[:, 'GFF FTP'] = gff_url
 
-    os.makedirs("data/references", exist_ok=True)
-    df_filtered.to_csv(f'data/{organism}_reference_genome.tsv', sep='\t', index=False)
-
-        
-    return df_filtered
+    outdir = Path(output)
+    if outdir.exists() and not outdir.is_dir():
+        raise NotADirectoryError(f"{outdir} existe pero no es un directorio")
+    
+    file_path = outdir / f"{organism}_reference_genome.tsv"
+    try:
+        df_filtered.to_csv(file_path, sep='\t', index=False)
+    except PermissionError as e:
+        raise PermissionError(f"Sin permisos para escribir {file_path}") from e
+    except FileNotFoundError as e:
+        raise FileNotFoundError(f"Directorio padre no existe para {file_path}") from e
+    except IsADirectoryError as e:
+        raise IsADirectoryError(f"{file_path} es un directorio, no un archivo") from e
+    except UnicodeEncodeError as e:
+        raise UnicodeEncodeError(e.encoding, e.object, e.start, e.end,
+                                 f"Error de codificación al escribir {file_path}")
+    except OSError as e:
+        raise OSError(f"Error del sistema escribiendo {file_path}: {e}") from e
+    
+    return file_path
