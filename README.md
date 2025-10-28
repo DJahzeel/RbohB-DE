@@ -31,7 +31,7 @@ El objetivo principal es **replicar** de forma reproducible el análisis transcr
 | :--- | :--- |
 | **BioProject** | PRJNA482464 (Datos públicos del estudio base) |
 | **Organismo** | *Phaseolus vulgaris* (cv. Negro Jamapa) |
-| **Referencia** | *P. vulgaris* (G19833), **NCBI GCA\_000499845.1** |
+| **Referencia** | *P. vulgaris* (G19833), **NCBI GCA\_000499845.2** |
 | **Diseño** | **2 genotipos** ($\text{WT}, \text{PvRbohB-RNAi}$) $\times$ **3 condiciones** ($\text{Control}, \text{Rhizobium tropici}, \text{Rhizophagus irregularis} \text{ [AM]}$) $\times$ **3 réplicas** $= \mathbf{18}$ corridas. |
 | **Tipo de datos** | RNA-seq (Illumina); *Layout* **mixto** (*PAIRED* en la mayoría, *SINGLE* solo en PvRbohB-RNAi + Rhizobium). |
 
