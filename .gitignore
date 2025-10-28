@@ -39,6 +39,7 @@ Thumbs.db
 credentials.*
 
 # Archivos de salida
+*.txt
 *.tsv
 *.csv
 *.log
