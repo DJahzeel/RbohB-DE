@@ -82,16 +82,17 @@ FASTQ ──► FastQC ──► BWA+samtools ──► htseq-count ──► DE
 
 
 
-## Estructira del repositorio 
+## Estructura del repositorio 
 ````
 .
 ├── README.md 
-├── .gitignore 
-├── data/       # FASTQs, metadatos
+├── .gitignore  # Archivos que no deben de ser versionados
+├── data/       # FASTQs, metadatos, datos de entrada
 ├── results/    # QC, alineamientos, conteos, DE, figuras
-├── scripts/    # Scripts de Bash/R/Python del pipeline
-├── lib/        # Archivos de referencia (genoma/GFF) e índices BWA
+├── scripts/    # Scripts de Bash/R/Python que controlan el flujo del pipeline
+├── src/        # Paquetes y modulos
 ├── docs/       # Documentación adicional o notas de desvío
+├── pyproject.toml # Archivo de configuracion para el proyecto     
 └── LICENSE                         
 ````
 
