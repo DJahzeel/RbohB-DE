@@ -5,7 +5,7 @@ import pandas as pd
 import time
 
 
-def run_end(table, output):
+def run_end(table):
 
     run_ends = {
         'SRR': table['Run'],
@@ -24,16 +24,27 @@ def run_end(table, output):
     print("Total Single-end:", len(single_end))
     print("Total Paired-end:", len(paired_end))
     
+    return paired_end, single_end
+    
+def save_run_ends(paired_end, single_end, output, processing):
     outdir = Path(output)
     if outdir.exists() and not outdir.is_dir():
         raise NotADirectoryError(f"{outdir} existe pero no es un directorio")
     
-    paired_file_path = outdir / "paired_end_runs.tsv"
-    single_file_path = outdir / "single_end_runs.tsv"
+    paired_file_path = None
+    single_file_path = None
 
     try:
-        paired_end.to_csv(paired_file_path, index=False, sep='\t')
-        single_end.to_csv(single_file_path, index=False, sep='\t')
+        if not paired_end.empty:
+            paired_file_path = outdir / f"{processing}_paired_end_runs.tsv"
+            paired_end.to_csv(paired_file_path, index=False, header=False, sep='\t')
+        else:
+            print ("No hay datos de Paired-end para guardar.")
+        if not single_end.empty:
+            single_file_path = outdir / f"{processing}_single_end_runs.tsv"
+            single_end.to_csv(single_file_path, index=False, header=False, sep='\t')
+        else:
+            print ("No hay datos de Single-end para guardar.")
 
     except PermissionError as e:
         raise PermissionError(f"Sin permisos para escribir ") from e

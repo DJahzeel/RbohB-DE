@@ -1,6 +1,7 @@
 import argparse as ap
 import time
 from pathlib import Path
+
 from paths.pathsval import(
     project_root,
     dboutput_directory,
@@ -23,6 +24,7 @@ from download_data.get_downloads_info import (
     get_assemblies_data,
     get_reference,
     run_end,
+    save_run_ends,
 )
 
 parser = ap.ArgumentParser(
@@ -91,8 +93,9 @@ def main():
             table,sra_out = sra_links(args.mail, record, outputdb)
             print(f"Guardado en {sra_out} # Añadir una pausa para evitar sobrecargar el servidor de NCBI")
             time.sleep(0.4)
-            single, paired= run_end(table, outputdb)
-            print(f"Información de runs guardada en: {single}, {paired}")
+            paired, single = run_end(table)
+            paired_path, single_path = save_run_ends(paired, single, outputdb)
+            print(f"Información de runs guardada en: {single_path}, {paired_path}")
         else:
             print(f"Base de datos no soportada: {record['database']}")
     
@@ -106,6 +109,8 @@ def main():
                 print(f"Referencia guardada en: {referencegenome}")
             else:
                 print(f"No se encontraron datos de ensamblaje para el organismo: {arg}")
+
+
  
 if __name__ == "__main__":
     main()
