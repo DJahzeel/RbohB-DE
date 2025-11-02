@@ -114,7 +114,7 @@ def main():
 
     elif args.type == "SRA":
          
-        single, paired = run_end(sra_df)
+        paired, single = run_end(sra_df)
         output_path = runends_directory(base_project_path, args.bioproject)
         paired_path, single_path = save_run_ends(paired, single, output_path, args.bioproject)
         process_runs(paired_path, single_path, paired_script, single_script, fastq_out_dir)
