@@ -1,5 +1,5 @@
 #!/bin/bash
-#$ -N sra_paired_downloads
+#$ -N sra_single_downloads
 #$ -cwd
 #$ -S /bin/bash
 #$ -pe smp 30
