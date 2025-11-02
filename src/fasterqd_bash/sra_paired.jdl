@@ -49,7 +49,7 @@ echo "Iniciando descargas Paired-end en paralelo..."
 parallel -j 5 \
     '
     echo "Iniciando descarga de: {}"
-    fasterq-dump --threads 6 --split-files --outdir data/fastq {}
+    fasterq-dump --threads 6 --split-files --outdir "$OUTPUT_DIR" {}
     gzip "$OUTPUT_DIR/{}_1.fastq"
     gzip "$OUTPUT_DIR/{}_2.fastq"
     ' < "$SRR_LIST_FILE"

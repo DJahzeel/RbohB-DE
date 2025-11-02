@@ -1,7 +1,7 @@
 import subprocess
 from pathlib import Path
 
-def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path, output_dir: Path, wait_for: bool = False):
+def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path, output_dir: Path, wait_for: bool):
     """
     Lanza un trabajo a qsub con el script y la lista de SRR especificados.
     
