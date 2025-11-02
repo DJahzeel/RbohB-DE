@@ -28,16 +28,21 @@ def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path
     print(f"Enviando trabajo '{job_name}' al clúster con 'qsub'...")
     
     # Construimos el comando (convirtiendo los Paths a strings)
-    comando = [
-        "qsub", 
-        str(script_path), 
-        str(srr_list_path),
-        str(output_dir)
-    ]
+    comando = ["qsub"]
 
     if wait_for:
         comando.extend(["-sync", "y"])
+    
+    comando.extend(["-N", job_name])
 
+    comando.extend([
+        str(script_path), 
+        str(srr_list_path),
+        str(output_dir)
+    ])
+
+    print(f"Comando: {' '.join(comando)}")
+    
     try:
         resultado = subprocess.run(comando, check=True, capture_output=True, text=True)
         
