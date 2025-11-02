@@ -1,5 +1,4 @@
 from pathlib import Path
-
 from pathlib import Path
 import sys
 
@@ -81,3 +80,15 @@ def runends_directory(root: Path, bioproject: str) -> Path:
         raise OSError(f"Error del sistema de archivos creando {re_dir}: {e}") from e
     
     return re_dir
+
+def fastq_directory(root: Path, bioproject: str) -> Path:
+    fq_dir = root / "data" / bioproject / "fastq" 
+
+    try:
+        fq_dir.mkdir(parents=True, exist_ok=True)
+    except PermissionError as permission_error:
+        raise PermissionError(f"No hay permisos para crear {fq_dir}") from permission_error
+    except OSError as e:
+        raise OSError(f"Error del sistema de archivos creando {fq_dir}: {e}") from e
+
+    return fq_dir

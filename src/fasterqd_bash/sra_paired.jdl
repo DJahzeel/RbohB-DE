@@ -36,16 +36,24 @@ SRR_LIST_FILE="$1"
 echo "Ruta del archivo de SRR(PAIRED): $SRR_LIST_FILE"
 echo "------------------------------------"
 
-echo "Asegurando que el directorio data/fastq exista..."
-mkdir -p data/fastq
+if [ -z "$2" ]then
+    echo "ERROR: No se proporcionó la ruta al directorio de salida."
+    exit 1
+fi
+OUTPUT_DIR="$2"
+echo "Ruta del directorio de salida: $OUTPUT_DIR"
+echo "------------------------------------"
+
+echo "Asegurando que el directorio $OUTPUT_DIR exista..."
+mkdir -p "$OUTPUT_DIR"
 # 4) Ejecuta el proceso principal
 echo "Iniciando descargas Paired-end en paralelo..."
 parallel -j 5 \
     '
     echo "Iniciando descarga de: {}"
     fasterq-dump --threads 6 --split-files --outdir data/fastq {}
-    gzip data/fastq/{}_1.fastq
-    gzip data/fastq/{}_2.fastq
+    gzip "$OUTPUT_DIR/{}_1.fastq"
+    gzip "$OUTPUT_DIR/{}_2.fastq"
     ' < "$SRR_LIST_FILE"
     
 echo "Todas las descargas paired han sido procesadas."
