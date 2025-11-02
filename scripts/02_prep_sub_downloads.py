@@ -24,6 +24,28 @@ parser.add_argument("-g", "--gse",
                     "Solo requerido si el tipo es 'GEO'.")
 args = parser.parse_args()
 
+def process_runs(paired_path, single_path, paired_script, single_script, fq_output_dir):
+
+    paired_exists = paired_path is not None and paired_path.exists()
+    single_exists = single_path is not None and single_path.exists()
+
+    if not paired_exists and not single_exists:
+        raise RuntimeError("No se crearon archivos de salida. No se mandaron trabajos de descarga.")
+
+    if paired_exists and not single_exists:
+        print("Solo se crearon archivos de pares. Se mandarán trabajos de descarga para pares.")
+        submit_fasterqdump_job(f"{args.bioproject}_paired_download", paired_script, paired_path, fq_output_dir, wait_for=False)
+
+    if single_exists and not paired_exists:
+        print("Solo se crearon archivos de simples. Se mandarán trabajos de descarga para simples.")
+        submit_fasterqdump_job(f"{args.bioproject}_single_download", single_script, single_path, fq_output_dir, wait_for=False)
+
+    if paired_exists and single_exists:
+        print("Se crearon archivos de pares y simples. Se mandarán trabajos de descarga para ambos secuencialmente.")
+        submit_fasterqdump_job(f"{args.bioproject}_single_download", single_script, single_path, fq_output_dir, wait_for=True)
+        submit_fasterqdump_job(f"{args.bioproject}_paired_download", paired_script, paired_path, fq_output_dir, wait_for=False)
+
+
 def main():
     print("BioProject:", args.bioproject)
     print("Tipo de descarga:", args.type)
@@ -36,25 +58,27 @@ def main():
     sra_files_dir = bpdir / "sra_files"
     gds_files_dir = bpdir / "gds_files"
 
+    paired_script = base_project_path / "src" / "fasterqd_bash" /"sra_paired.jdl"
+    single_script = base_project_path / "src" / "fasterqd_bash" /"sra_single.jdl"
+
     sra_info_path = sra_files_dir / "sra_runinfo.tsv"
     gds_info_path = gds_files_dir / "gse_gsm.tsv"
 
     if not sra_info_path.is_file():
         raise FileNotFoundError(f"SRA runinfo file not found at {sra_info_path}")
-
+    
     print (f"Reading SRA runinfo from {sra_info_path}")
     
+    try:
+        sra_df = pd.read_csv(sra_info_path, sep="\t")
+        if sra_df.empty:
+            raise ValueError("SRA runinfo file is empty.")
+        if 'Run' not in sra_df.columns or 'LibraryLayout' not in sra_df.columns:
+            raise ValueError("SRA runinfo file does not contain 'Run' or 'LibraryLayout' column.")
+    except Exception as e:
+        raise ValueError(f"Error reading SRA runinfo file: {e}")
 
-    if args.type == "GSE":
-        try:
-            sra_df = pd.read_csv(sra_info_path, sep="\t")
-            if sra_df.empty:
-                raise ValueError("SRA runinfo file is empty.")
-            if 'Run' not in sra_df.columns or 'LibraryLayout' not in sra_df.columns:
-                raise ValueError("SRA runinfo file does not contain 'Run' or 'LibraryLayout' column.")
-        except Exception as e:
-            raise ValueError(f"Error reading SRA runinfo file: {e}")
-
+    if args.type == "GEO":
         try:
             df_gse_gsm = pd.read_csv(gds_info_path, sep=",")
             if df_gse_gsm.empty:
@@ -76,45 +100,23 @@ def main():
             single, paired = run_end(sra_subset)
             output_path = runends_directory(base_project_path, args.bioproject)
             paired_path, single_path = save_run_ends(paired, single, output_path, gse)
+            process_runs(paired_path, single_path, paired_script, single_script)
 
             print(f"Processed {gse}:")
             print(f"  Paired-end runs saved to: {paired_path}")
             print(f"  Single-end runs saved to: {single_path}")
 
     elif args.type == "SRA":
-        try:
-            sra_df = pd.read_csv(sra_info_path, sep="\t")
-            if sra_df.empty:
-                raise ValueError("SRA runinfo file is empty.")
-            if 'Run' not in sra_df.columns or 'LibraryLayout' not in sra_df.columns:
-                raise ValueError("SRA runinfo file does not contain 'Run' or 'LibraryLayout' column.")
-        except Exception as e:
-            raise ValueError(f"Error reading SRA runinfo file: {e}")
          
         single, paired = run_end(sra_df)
         output_path = runends_directory(base_project_path, args.bioproject)
         paired_path, single_path = save_run_ends(paired, single, output_path, args.bioproject)
+        process_runs(paired_path, single_path, paired_script, single_script)
 
         print(f"Processed SRA project {args.bioproject}:")
         print(f" Paired-end runs saved to: {paired_path}")
         print(f" Single-end runs saved to: {single_path}")
 
-    paired_script = base_project_path / "src" / "fasterqd_bash" /"sra_paired.jdl"
-    single_script = base_project_path / "src" / "fasterqd_bash" /"sra_single.jdl"
-
-    if not paired_path.exists() and not single_path.exists():
-        raise RuntimeError("No se crearon archivos de salida. No se mandaron trabajos de descarga.")
+if __name__ == "__main__":
+    main()
     
-    if paired_path.exists() and not single_path.exists():
-        print("Solo se crearon archivos de pares. Se mandarán trabajos de descarga para pares.")
-        submit_fasterqdump_job(f"{args.bioproject}_paired_download", paired_script, paired_path, wait_for=False)
-
-    if single_path.exists() and not paired_path.exists():
-        print("Solo se crearon archivos de simples. Se mandarán trabajos de descarga para simples.")
-        submit_fasterqdump_job(f"{args.bioproject}_single_download", single_script, single_path, wait_for=False)
-
-    if paired_path.exists() and single_path.exists():
-        print("Se crearon archivos de pares y simples. Se mandarán trabajos de descarga para ambos secuencialmente.")
-        submit_fasterqdump_job(f"{args.bioproject}_single_download", single_script, single_path, wait_for=True)
-        submit_fasterqdump_job(f"{args.bioproject}_paired_download", paired_script, paired_path, wait_for=False)
-

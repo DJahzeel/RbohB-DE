@@ -1,7 +1,7 @@
 import subprocess
 from pathlib import Path
 
-def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path, wait_for: bool = False):
+def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path, output_dir: Path, wait_for: bool = False):
     """
     Lanza un trabajo a qsub con el script y la lista de SRR especificados.
     
@@ -20,6 +20,10 @@ def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path
     if not script_path.exists():
         print(f"ERROR: No se encontró el script JDL: {script_path}")
         return
+    
+    if not output_dir.is_dir():
+        print(f"ERROR: El directorio de salida no existe: {output_dir}")
+        return
 
     print(f"Enviando trabajo '{job_name}' al clúster con 'qsub'...")
     
@@ -27,7 +31,8 @@ def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path
     comando = [
         "qsub", 
         str(script_path), 
-        str(srr_list_path)
+        str(srr_list_path),
+        str(output_dir)
     ]
 
     if wait_for:
