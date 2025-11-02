@@ -12,6 +12,7 @@ def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path
                                 que se pasará como argumento $1.
     """
     
+    qsubname = "P" + job_name  # Prefijo 'P' para identificar trabajos del pipeline
     # Verificación de que los archivos de entrada existan
     if not srr_list_path or not srr_list_path.exists():
         print(f"No se encontró archivo de SRR para '{job_name}' en {srr_list_path}, no se enviará el trabajo.")
@@ -25,15 +26,15 @@ def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path
         print(f"ERROR: El directorio de salida no existe: {output_dir}")
         return
 
-    print(f"Enviando trabajo '{job_name}' al clúster con 'qsub'...")
+    print(f"Enviando trabajo '{qsubname}' al clúster con 'qsub'...")
     
     # Construimos el comando (convirtiendo los Paths a strings)
     comando = ["qsub"]
 
     if wait_for:
         comando.extend(["-sync", "y"])
-    
-    comando.extend(["-N", job_name])
+
+    comando.extend(["-N", qsubname])
 
     comando.extend([
         str(script_path), 
