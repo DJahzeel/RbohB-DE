@@ -69,3 +69,15 @@ def references_directory(root: Path) -> Path:
         raise OSError(f"Error del sistema de archivos creando {ref_dir}: {e}") from e
 
     return ref_dir
+
+def runends_directory(root: Path, bioproject: str) -> Path:
+    re_dir = root / "results" / bioproject / "runends" 
+
+    try:
+        re_dir.mkdir(parents=True, exist_ok=True)
+    except PermissionError as permission_error:
+        raise PermissionError(f"No hay permisos para crear {re_dir}") from permission_error
+    except OSError as e:
+        raise OSError(f"Error del sistema de archivos creando {re_dir}: {e}") from e
+    
+    return re_dir
