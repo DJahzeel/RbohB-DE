@@ -36,7 +36,7 @@ SRR_LIST_FILE="$1"
 echo "Ruta del archivo de SRR(PAIRED): $SRR_LIST_FILE"
 echo "------------------------------------"
 
-if [ -z "$2" ]then
+if [ -z "$2" ]; then
     echo "ERROR: No se proporcionó la ruta al directorio de salida."
     exit 1
 fi

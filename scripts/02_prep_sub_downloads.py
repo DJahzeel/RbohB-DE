@@ -103,7 +103,7 @@ def main():
                 print(f"No matching GSM entries found in SRA runinfo for {gse}. Skipping.")
                 continue
 
-            single, paired = run_end(sra_subset)
+            paired, single = run_end(sra_subset)
             output_path = runends_directory(base_project_path, args.bioproject)
             paired_path, single_path = save_run_ends(paired, single, output_path, gse)
             process_runs(paired_path, single_path, paired_script, single_script, fastq_out_dir)
