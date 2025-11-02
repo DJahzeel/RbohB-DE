@@ -42,8 +42,9 @@ def process_runs(paired_path, single_path, paired_script, single_script, fq_outp
 
     if paired_exists and single_exists:
         print("Se crearon archivos de pares y simples. Se mandarán trabajos de descarga para ambos secuencialmente.")
-        submit_fasterqdump_job(f"{args.bioproject}_single_download", single_script, single_path, fq_output_dir, wait_for=True)
-        submit_fasterqdump_job(f"{args.bioproject}_paired_download", paired_script, paired_path, fq_output_dir, wait_for=False)
+        submit_fasterqdump_job(f"{args.bioproject}_paired_download", paired_script, paired_path, fq_output_dir, wait_for=True)
+        submit_fasterqdump_job(f"{args.bioproject}_single_download", single_script, single_path, fq_output_dir, wait_for=False)
+        
 
 
 def main():

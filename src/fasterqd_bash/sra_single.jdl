@@ -45,9 +45,6 @@ OUTPUT_DIR="$2"
 echo "Directorio de salida: $OUTPUT_DIR"
 echo "------------------------------------"
 
-echo "Asegurando que el directorio $OUTPUT_DIR exista..."
-mkdir -p "$OUTPUT_DIR"
-
 # 4) Ejecuta el proceso principal
 echo "Iniciando descargas Single-end en paralelo..."
 parallel -j 5 \
