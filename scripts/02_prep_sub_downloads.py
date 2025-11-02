@@ -1,6 +1,6 @@
 import argparse as ap
 from download_data.get_downloads_info import save_run_ends
-from paths.pathsval import project_root, runends_directory
+from paths.pathsval import project_root, runends_directory, fastq_directory
 from utils.job_submission import submit_fasterqdump_job
 from download_data.get_downloads_info import run_end
 import pandas as pd
@@ -77,6 +77,12 @@ def main():
             raise ValueError("SRA runinfo file does not contain 'Run' or 'LibraryLayout' column.")
     except Exception as e:
         raise ValueError(f"Error reading SRA runinfo file: {e}")
+    
+    try:
+        fastq_out_dir = fastq_directory(base_project_path, args.bioproject)
+        print(f"Los archivos FASTQ se guardarán en: {fastq_out_dir}")
+    except Exception as e:
+        raise RuntimeError(f"Error al crear el directorio de salida FASTQ: {e}") from e
 
     if args.type == "GEO":
         try:
@@ -100,7 +106,7 @@ def main():
             single, paired = run_end(sra_subset)
             output_path = runends_directory(base_project_path, args.bioproject)
             paired_path, single_path = save_run_ends(paired, single, output_path, gse)
-            process_runs(paired_path, single_path, paired_script, single_script)
+            process_runs(paired_path, single_path, paired_script, single_script, fastq_out_dir)
 
             print(f"Processed {gse}:")
             print(f"  Paired-end runs saved to: {paired_path}")
@@ -111,7 +117,7 @@ def main():
         single, paired = run_end(sra_df)
         output_path = runends_directory(base_project_path, args.bioproject)
         paired_path, single_path = save_run_ends(paired, single, output_path, args.bioproject)
-        process_runs(paired_path, single_path, paired_script, single_script)
+        process_runs(paired_path, single_path, paired_script, single_script,fastq_directory)
 
         print(f"Processed SRA project {args.bioproject}:")
         print(f" Paired-end runs saved to: {paired_path}")
