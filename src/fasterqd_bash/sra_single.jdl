@@ -48,11 +48,22 @@ echo "------------------------------------"
 export OUTPUT_DIR
 # 4) Ejecuta el proceso principal
 echo "Iniciando descargas Single-end en paralelo..."
-parallel --env OUTPUT_DIR -j 5 \
-    '
-    echo "Iniciando descarga de: {}"
-    fasterq-dump --threads 6 {} | gzip > "$OUTPUT_DIR/{}.fastq.gz"
+parallel --env OUTPUT_DIR -j 5 '
+  echo "Iniciando descarga de: {}"
+  if [ -f "$OUTPUT_DIR/{}.fastq.gz" ]; then
+      echo "  -> {} ya tiene .fastq.gz, se omite."
+  else
+      fasterq-dump --threads 4 --stdout {} | gzip > "$OUTPUT_DIR/{}.fastq.gz"
+  fi
+' < "$SRR_LIST_FILE"
 
-    ' < "$SRR_LIST_FILE"
+parallel --env OUTPUT_DIR -j 5 '
+  echo "Iniciando descarga de: {}"
+  if [ -f "$OUTPUT_DIR/{}.fastq.gz" ]; then
+      echo "  -> {} ya tiene .fastq.gz, se omite."
+  else
+      fasterq-dump --threads 4 --stdout {} | gzip > "$OUTPUT_DIR/{}.fastq.gz"
+  fi
+' < "$SRR_LIST_FILE"
 
 echo "Todas las descargas single han sido procesadas."
