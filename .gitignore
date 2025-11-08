@@ -40,7 +40,6 @@ credentials.*
 
 # Archivos de salida
 *.txt
-*.tsv
 *.csv
 *.log
 *.out
