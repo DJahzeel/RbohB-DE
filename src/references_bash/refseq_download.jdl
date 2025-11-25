@@ -1,0 +1,28 @@
+#!/bin/bash
+#$ -N dl_genomas
+#$ -cwd
+#$ -S /bin/bash
+#$ -pe smp 20
+
+set -e
+
+if [ -z "$1" ]; then
+    echo "ERROR: No se proporcionó la ruta al archivo de los GFF y FASTA."
+    exit 1
+fi
+URLS_FILE=$1
+echo "Ruta del archivo de (PAIRED): $SRR_LIST_FILE"
+echo "------------------------------------"
+
+if [ -z "$2" ]; then
+    echo "ERROR: No se proporcionó la ruta al directorio de salida."
+    exit 1
+fi
+OUTPUT_DIR="$2"
+echo "Ruta del directorio de salida: $OUTPUT_DIR"
+echo "------------------------------------"
+
+export OUTPUT_DIR
+parallel -j 4 "wget -c -P $OUTPUT_DIR {}" :::: "$URLS_FILE"
+
+echo "Descargas terminadas.
