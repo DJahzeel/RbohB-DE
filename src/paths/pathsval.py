@@ -128,3 +128,27 @@ def refseq_directory(root: Path) -> Path:
         raise OSError(f"Error del sistema de archivos creando {refseq_dir}: {e}") from e
 
     return refseq_dir
+
+def diffexp_directory(root: Path, bioproject: str) -> Path:
+    de_dir = root / "results" / bioproject/ "diffexp"
+
+    try:
+        de_dir.mkdir(parents=True, exist_ok=True)
+    except PermissionError as permission_error:
+        raise PermissionError(f"No hay permisos para crear {de_dir}") from permission_error
+    except OSError as e:
+        raise OSError(f"Error del sistema de archivos creando {de_dir}: {e}") from e
+
+    return de_dir
+
+def annotation_directory(root: Path, bioproject: str) -> Path: 
+    annotation_dir = root / "results" / bioproject / "annotation"
+
+    try:
+        annotation_dir.mkdir(parents=True, exist_ok=True)
+    except PermissionError as permission_error:
+        raise PermissionError(f"No hay permisos para crear {annotation_dir}") from permission_error
+    except OSError as e:
+        raise OSError(f"Error del sistema de archivos creando {annotation_dir}: {e}") from e
+
+    return annotation_dir

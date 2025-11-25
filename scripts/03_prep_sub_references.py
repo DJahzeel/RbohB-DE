@@ -4,7 +4,6 @@ from download_data.get_downloads_info import (
 )
 from paths.pathsval import (
     referencelinks_directory,
-    refseq_directory,
     project_root,
 )
 from utils.job_submission import submit_qsub_job
@@ -35,7 +34,7 @@ def main():
     to_download = save_ftp_links(selected_indices, found_organisms, link_dir, only_organism)
 
     references_script = base_project_root / "src" / "references_bash" / "refseq_download.jdl"
-    refseq_path = refseq_directory(base_project_root)
+    refseq_path = base_project_root / "references" 
     submit_qsub_job(f"{processing_prefix}_reference_download", references_script, to_download, refseq_path, wait_for=True)
     print(f"Descarga de genomas de referencia para {processing_prefix} terminada.")
     
