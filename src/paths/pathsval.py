@@ -92,3 +92,39 @@ def fastq_directory(root: Path, bioproject: str) -> Path:
         raise OSError(f"Error del sistema de archivos creando {fq_dir}: {e}") from e
 
     return fq_dir
+
+def sampletable_directory(root: Path, bioproject: str) -> Path:
+    st_dir = root / "results" / bioproject / "sampletables" 
+
+    try:
+        st_dir.mkdir(parents=True, exist_ok=True)
+    except PermissionError as permission_error:
+        raise PermissionError(f"No hay permisos para crear {st_dir}") from permission_error
+    except OSError as e:
+        raise OSError(f"Error del sistema de archivos creando {st_dir}: {e}") from e
+
+    return st_dir
+
+def referencelinks_directory(root: Path) -> Path:
+    ftp_dir = root / "results" / "reference"
+
+    try:
+        ftp_dir.mkdir(parents=True, exist_ok=True)
+    except PermissionError as permission_error:
+        raise PermissionError(f"No hay permisos para crear {ftp_dir}") from permission_error
+    except OSError as e:
+        raise OSError(f"Error del sistema de archivos creando {ftp_dir}: {e}") from e
+
+    return ftp_dir
+
+def refseq_directory(root: Path) -> Path:
+    refseq_dir = root / "data" / "references" / "refseq"
+
+    try:
+        refseq_dir.mkdir(parents=True, exist_ok=True)
+    except PermissionError as permission_error:
+        raise PermissionError(f"No hay permisos para crear {refseq_dir}") from permission_error
+    except OSError as e:
+        raise OSError(f"Error del sistema de archivos creando {refseq_dir}: {e}") from e
+
+    return refseq_dir

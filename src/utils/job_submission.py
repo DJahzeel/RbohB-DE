@@ -1,7 +1,11 @@
 import subprocess
 from pathlib import Path
 
+<<<<<<< Updated upstream
 def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path, output_dir: Path, wait_for: bool = False):
+=======
+def submit_qsub_job(job_name: str, script_path: Path, list_path: Path, output_dir: Path, wait_for: bool):
+>>>>>>> Stashed changes
     """
     Lanza un trabajo a qsub con el script y la lista de SRR especificados.
     
@@ -12,9 +16,13 @@ def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path
                                 que se pasará como argumento $1.
     """
     
+<<<<<<< Updated upstream
+=======
+    qsubname = "R" + job_name  # Prefijo 'P' para identificar trabajos del pipeline
+>>>>>>> Stashed changes
     # Verificación de que los archivos de entrada existan
-    if not srr_list_path or not srr_list_path.exists():
-        print(f"No se encontró archivo de SRR para '{job_name}' en {srr_list_path}, no se enviará el trabajo.")
+    if not list_path or not list_path.exists():
+        print(f"No se encontró archivo de correspondiente para '{job_name}' en {list_path}, no se enviará el trabajo.")
         return
     
     if not script_path.exists():
@@ -38,6 +46,19 @@ def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path
     if wait_for:
         comando.extend(["-sync", "y"])
 
+<<<<<<< Updated upstream
+=======
+    comando.extend(["-N", qsubname])
+
+    comando.extend([
+        str(script_path), 
+        str(list_path),
+        str(output_dir)
+    ])
+
+    print(f"Comando: {' '.join(comando)}")
+    
+>>>>>>> Stashed changes
     try:
         resultado = subprocess.run(comando, check=True, capture_output=True, text=True)
         
@@ -53,3 +74,5 @@ def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path
         print(f"Error (stderr): {e.stderr.strip()}")
     except Exception as e:
         print(f"Ocurrió un error inesperado al lanzar el subprocess: {e}")
+
+
