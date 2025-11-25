@@ -41,17 +41,17 @@ def get_default_paths(
     root = project_root()
 
     if counts_path is None:
-        counts_path = root / "results" / bioproject / "All_counts_rbohb.txt"
+        counts_path = root / "results" / bioproject /"counts" /"All_counts_rbohb.txt"
     else:
         counts_path = Path(counts_path)
 
     if srr_ids_path is None:
-        srr_ids_path = root / "data" / bioproject / "srr_ids.txt"
+        srr_ids_path = root / "data" / bioproject / "sra_files" / "sra_runinfo.tsv"
     else:
         srr_ids_path = Path(srr_ids_path)
 
     if outdir is None:
-        outdir = diffexp_directory(root) / bioproject
+        outdir = diffexp_directory(root, bioproject=bioproject)
     else:
         outdir = Path(outdir)
 

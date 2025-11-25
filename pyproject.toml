@@ -1,9 +1,15 @@
 [project]
 name = "RbohB-DE"
-version = "0.1.1"
+version = "1.0.0"
 dependencies = [
     "pandas",
-    "biopython"
+    "biopython",
+    "numpy",
+    "matplotlib",
+    "seaborn",
+    "matplotlib",
+    "scikit-learn"
+    pydeseq2"
 ]
 
 [tool.setuptools.packages.find]
