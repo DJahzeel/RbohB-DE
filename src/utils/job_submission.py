@@ -1,10 +1,7 @@
 import subprocess
 from pathlib import Path
 
-def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path, output_dir: Path, wait_for: bool = False):
-
-def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path, output_dir: Path, wait_for: bool):
-
+def submit_qsub_job(job_name: str, script_path: Path, list_path: Path, output_dir: Path, wait_for: bool):
     """
     Lanza un trabajo a qsub con el script y la lista de SRR especificados.
     
@@ -15,9 +12,7 @@ def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path
                                 que se pasará como argumento $1.
     """
     
-
-    qsubname = "P" + job_name  # Prefijo 'P' para identificar trabajos del pipeline
-
+    qsubname = "R" + job_name  # Prefijo 'P' para identificar trabajos del pipeline
     # Verificación de que los archivos de entrada existan
     if not list_path or not list_path.exists():
         print(f"No se encontró archivo de correspondiente para '{job_name}' en {list_path}, no se enviará el trabajo.")
@@ -49,7 +44,6 @@ def submit_fasterqdump_job(job_name: str, script_path: Path, srr_list_path: Path
 
     print(f"Comando: {' '.join(comando)}")
     
-
     try:
         resultado = subprocess.run(comando, check=True, capture_output=True, text=True)
         
